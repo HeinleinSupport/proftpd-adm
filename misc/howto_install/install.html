@@ -1,0 +1,1263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>HOWTO: Install proFTPd Administrator</title>
+	<link rel="stylesheet" type="text/css" href="../../style/blueish_hue/blueish_hue.css">
+</head>
+
+<body>
+	<table class="outerBounds"><tr><td>
+	<table class="box">
+		<tr>
+			<td class="box-headline">&gt;&gt; <A name="top"></a>Installing proFTPd Administrator</td>
+		</tr>
+		<tr>
+			<td>
+			<table class="box" style="border-style: none;">
+				<tr>
+					<td class="box-sel" align="justify">
+<!-- Installation instructions -->
+						This guide documents one way to install proFTPd Admin as well as setting up
+						the MySQL-server it and proFTPd depends on (when authentication is done via
+						MySQL that is). As guides go this document wasn't meant to be comprehensive,
+						but simply give a few pointers as to what to do in order to get started with
+						proFTPd (and authentication via MySQL).
+						<br><br>
+						As you go on reading this document there will be listed several commands that
+						must be run in order to complete the installation - however, some of these
+						differ somewhat or can be done in an easier way on some of the systems. The
+						platform specific commands will be listed in their own colour like this:
+						<blockquote class="doc-commands">
+							These are commands that are general, and should in theory be applicaple
+							for the platforms being discussed.
+						</blockquote>
+						<blockquote class="doc-commands-quote">
+							Lines looking like these are snippets and quotes from either output
+							or files discussed in the text either above, below or possibly both.
+						</blockquote>
+
+						<br><br>
+						This document has been split into the following sections:
+						<blockquote>
+							&gt;&gt; <a href="#mysql">		Installing MySQL					</a><br>
+							&gt;&gt; <a href="#proftpd">	Installing proFTPd					</a><br>
+							&gt;&gt; <a href="#admin">		Installing proFTPd Administrator				</a><br>
+							&gt;&gt; <a href="#troubleshooting">	Q&amp;A, Troubleshooting						</a>
+						</blockquote>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	</td></tr></table>
+
+	<br><br>
+
+	<table class="outerBounds"><tr><td>
+	<table class="box">
+		<tr>
+			<td class="box-headline">&gt;&gt; <A name="mysql"></a>Installing MySQL</td>
+		</tr>
+		<tr>
+			<td>
+			<table class="box" style="border-style: none;">
+				<tr>
+					<td class="box-sel" align="justify">
+<!-- MySQL -->
+						This section is dedicated to installing the MySQL-server on your system -
+						installing it is well documented elsewhere and there are a few ways of
+						doing it depending on the operating system/distribution you are using at
+						this moment. I have documented here a generic description for installing
+						the server, and you can skip to that section by clicking one of the links
+						below.
+						<blockquote>
+							&gt;&gt; <a href="#mysql_source">	Installing MySQL from source				</a><br>
+							&gt;&gt; <a href="#mysql_ports">	Installing MySQL on FreeBSD using ports			</a><br>
+							&gt;&gt; <a href="#mysql_mandrake">	Installing MySQL on Mandrake				</a><br>
+							&gt;&gt; <a href="#mysql_debian">	Installing MySQL on Debian				</a>
+
+
+						</blockquote>
+						After you've finished installing MySQL and started the server it's very
+						important that you change the super-user's default password in order to
+						maintain your servers integrity. The default superuser is in MySQL as in
+						most of the *nix'es called root, and MySQL the default root-password is
+						blank - we can't have that, now can we? ,- and that's why you should execute
+						the following command (substitute "&lt;database_password&gt;" for a password of
+						your own choice - just remember it when you need it at a later time).
+
+						<blockquote class="doc-commands">
+							mysqladmin -u root password &lt;database_password&gt;
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="mysql_source"></a>Installing MySQL from source</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						The first part of the installation is simply the installation of the MySQL-
+						database server. To make sure that we have available the libraries we need
+						in order to compile proFTPd with MySQL-support we also compile MySQL from
+						source as well (Not even sure there are binaries of proFTPd available with
+						SQL-support already built in - being a Slackware user I hardly care anyway).
+						<br><br>
+						The first thing you need to do is actually fetching the source-code from
+						MySQL's homepage (which can be found at "<a href="http://dev.mysql.com/downloads/" target="_blank">http://dev.mysql.com/downloads/</a>").
+						Don't get intimidated by the sheer ammount of different files and versions
+						available for downloads - what you're looking is the stable production release
+						(at the time of writing that version number is 4.0). Just click that and go on
+						to the next page. Scroll down to the bottom of this page and you'll come to
+						the section named "Source Downloads" and fetch the Tarball from a mirror close
+						to your location (store this file at a location you know how to find via
+						console and have write access to - "~" is usually my choice). With that done
+						we'll be getting to the meatier stuff in few moments, but now we'll pause for
+						commercials (just kidding) - I hate commercials.
+						<br><br>
+						Drop out to console or open up a terminal, and the locate the directory you
+						downloaded the source-code to (you know! - that tarball thingamajiggy). Other
+						than that just do as I tell you:
+						<blockquote class="doc-commands">
+							tar xfvz mysql-4.0.20.tar.gz									<br>
+							cd mysql-4.0.20											<br>
+																			<br>
+							./configure											<br>
+							make
+						</blockquote>
+						The code should now be compiling, and don't worry about not catching the
+						meaning of the text that whirles by on your screen (simply worry about it
+						suddenly stopping complaining about some or other error - it is rare however
+						since the MySQL-developers really seem to know their stuff). Now would also be
+						the perfect time to get some coffee (if you're using a really slow computer,
+						&gt;500Mhz, consider takeout as well). When you get back, and if it all seems to
+						have finished without errors - switch to root (give the command "su" and type
+						in your root-password).
+						<br><br>
+						The next few commands will finally install the database server and set up the
+						system so that the database can read from and write to its files (note to
+						yourself: databases are located in "/usr/local/var" and it is this directory
+						you'll make backups of when the time comes - if ever). If you're simply
+						updating your previous self-compiled MySQL-server you should skip thos last
+						two commands.
+						<blockquote class="doc-commands">
+							make install											<br>
+							/usr/local/bin/mysql_install_db									<br><br>
+							chgrp -R mysql /usr/local/var/									<br>
+							chown -R mysql /usr/local/var/
+						</blockquote>
+						The next command we'll issue will start up the database server so it'll be
+						ready for your every command (well atleast SQL-statements, if not mow your
+						lawn or clean your room - too bad - someone should issue a bugfix for this.).
+						The default superuser is in MySQL as in most of the *nix'es called root, and
+						MySQL the default root-password is blank - we can't do that now can we and
+						that's why we run the second command (substitute "&lt;database_password&gt;"
+						for a password of your own choice - just remember it when you see me refer
+						to it at a later time).
+						<blockquote class="doc-commands">
+							/usr/local/bin/mysqld_safe &									<br>
+							mysqladmin -u root password &lt;database_password&gt;
+						</blockquote>
+						Congratulations, you've now set up your own SQL-server (best of all, it was
+						free compared to the rather pricey and performance-impaired SQL-server from
+						Microsoft - and you'll even get kudoz from your internet-friends because you
+						compiled it from source). If you'll ever need to shut down the server, the
+						correct way to do it is to issue this command:
+						<blockquote class="doc-commands">
+							/usr/local/bin/mysqladmin shutdown -u root -p
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="mysql_ports"></a>Installing MySQL on FreeBSD using ports</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Installing MySQL using the ports-system is as easy can be, and there's no much
+						need for explaining the way it works if you're running FreeBSD already. Just do
+						the following and you should be good to go (it even downloads the sourcecode for
+						you, so there's no reason to go meddling about on other web-pages):
+						<blockquote class="doc-commands">
+							cd /usr/ports/databases/mysql40-server								<br>
+							make												<br><br>
+							make install
+						</blockquote>
+						The server can be started and stopped by isseuing the following command:
+						<blockquote class="doc-commands">
+							/usr/local/etc/rc.d/mysql-server.sh start|stop
+						</blockquote>
+						Remember to set the root-users default password like we discussed in the
+						introduction to this section, to go there now you can simply click <a href="#mysql">here</a>.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="mysql_mandrake"></a>Installing MySQL on Mandrake</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Installing MySQL on Mandrake using prepackaged software as long as you make
+						sure you get a hold of all the needed packages. Start up rpmdrake as root or
+						select the program from the K-Panel (taskbar thingy at the bottom of your
+						screen) by selecting System->Configuration->Packaging->Install software (you'll
+						need to enter your root password as we'll be installing software).
+						<br><br>
+						By the time you read this newer packages than the ones I install below may have
+						become available, and you should install these instead. You should atleast install
+						the following packages (accept all dependencies as well):
+						<ul>
+							<li>libmysql12-4.0.18-1.1.100mdk
+							<li>libmysql12-devel-4.0.18-1.1.100mdk
+							<li>MySQL-4.0.18-1.1.100mdk
+							<li>MySQL-common-4.0.18-1.1.100mdk
+						</ul>
+						The server can be started and stopped by isseuing the following command:
+						<blockquote class="doc-commands">
+							service mysql start|stop|restart
+						</blockquote>
+						Remember to set the root-users default password like we discussed in the
+						introduction to this section, to go there now you can simply click <a href="#mysql">here</a>.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="mysql_debian"></a>Installing MySQL on Debian</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Installing MySQL is as easy as simply executing the following command (as root):
+						<blockquote class="doc-commands">
+							apt-get install mysql-server
+						</blockquote>
+						That should be all that is required to get the server up and running. If you at
+						any time want to start or stop your newly acquired SQL-server this can be done as
+						follows:
+						<blockquote class="doc-commands">
+							cd /etc/init.d											<br>
+							./mysql start
+						</blockquote>
+						Remember to set the root-users default password like we discussed in the
+						introduction to this section, to go there now you can simply click <a href="#mysql">here</a>.
+<!-- MySQL -->
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	</td></tr></table>
+
+	<br><br>
+
+	<table class="outerBounds"><tr><td>
+	<table class="box">
+		<tr>
+			<td class="box-headline">&gt;&gt; <A name="proftpd"></a>Installing proFTPd</td>
+		</tr>
+		<tr>
+			<td>
+			<table class="box" style="border-style: none;">
+				<tr>
+					<td class="box-sel" align="justify">
+<!-- ProFTPd -->
+						Installing proFTPd with MySQL-support for authentication is far from as easy
+						it should be - mainly because most distributions don't offer a package with
+						this module compiled in. If you're in doubt wether your current installation
+						of proFTPd already has this module, you can try running the command
+						"proftpd -l" and see if it lists a module by the name "mod_sql_mysql.c" (if it
+						didn't you should probably deinstall that package and continue with this
+						guide). Consult the alternatives listed below (if you're running FreeBSD I
+						highly recommend installing using ports).
+						<blockquote>
+							&gt;&gt; <a href="#proftpd_source">	Installing proFTPd from source			</a><br>
+							&gt;&gt; <a href="#proftpd_ports">	Installing proFTPd on FreeBSD using ports	</a><br>
+							&gt;&gt; <a href="#proftpd_debian">	Installing proFTPd on Debian			</a>
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="proftpd_source"></a>Installing proFTPd from source</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Now compile it and install proFTPd admin with MySQL-authentication (if that
+						sounds like an easy task - just skip this section). Just like we did with
+						MySQL I'll go through it step by step - just in case. Fetch the source-code
+						from the servers homepage (link: <a href="http://www.proftpd.org/" target="_blank">
+						http://www.proftpd.org/</a>). You'll find direct links to the source-code in
+						the upper-left part of your browser - for the sake of making this guide look
+						a little less repetitive we'll unbun the bun instead (that means: click the
+						link named "bz2"). Just type the following commands to get that compilation
+						going (current directory assumed to be the location where you just saved the
+						source code for proFTPd). Note that if you intend to use functionality for
+						quotas you'll also need to compile in support for "mod_quotatab".
+						<blockquote class="doc-commands">
+							tar xfvj proftpd-1.2.9.tar.bz2							<br>
+							cd proftpd-1.2.9										<br>
+																					<br>
+							# Standard, without Quota support						<br>
+							./configure --with-modules=mod_sql:mod_sql_mysql --with-includes=/usr/local/include/mysql/
+							--with-libraries=/usr/local/lib/mysql/<br><br>
+							# With Quota support									<br>
+							./configure --with-modules=mod_sql:mod_sql_mysql:mod_quotatab:mod_quotatab_sql \<br>
+							--with-includes=/usr/local/include/mysql/ --with-libraries=/usr/local/lib/mysql/<br><br>
+							make
+						</blockquote>
+						Thankfully - compiling proFTPd doesn't take nearly as long as compiling MySQL
+						did, but please consider saucing your self up in caffeinated soft-drinks (try
+						something new out of the vending machine if you're so lucky). We need to be
+						root to install the server, so just fire off that "su" command and we'll get
+						going.
+						<blockquote class="doc-commands">
+							make install
+						</blockquote>
+						The configuration file, called "proftpd.conf", has been placed in "/usr/local/etc"
+						(familiarize youself with this configuration file and it's location if you
+						plan on modifying it yourself). At this point I guess you'll probably be
+						wanting to test out your brand spanking new ftp-server, and want to know how
+						to get it started - well that's no more work than running this command (it
+						probably won't do much right now, but that's only until we've replaced it with
+						my own configuration-sample-file):
+						<blockquote class="doc-commands">
+							/usr/local/sbin/in.proftpd
+						</blockquote>
+						That was rather painless (guessing your way to that third command above is a
+						lot harder that typing it, atleast if you're new to compiling software
+						yourself - trust me on that one).
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="proftpd_ports"></a>Installing proFTPd on FreeBSD using ports</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Security is always an issue, so before we continue you should make sure that
+						your ports-tree is up-to-date (try the command "cvsup" and we should be ready
+						to get going). The commands listed below should download and compile the
+						sourcecode as well as install it (you need to be root to perform these
+						commands).
+						<blockquote class="doc-commands">
+							cd /usr/ports/ftp/proftpd-mysql/								<br>
+							make												<br>
+																			<br>
+							make install
+						</blockquote>
+						The configuration file, called "proftpd.conf", has been placed in "/usr/local/etc"
+						(familiarize youself with this configuration file and it's location if you
+						plan on modifying it yourself). At this point I guess you'll probably be
+						wanting to test out your brand spanking new ftp-server, and want to know how
+						to get it started - well that's no more work than running these commands (it
+						probably won't do much right now, but that's only until we've replaced it with
+						my own configuration-sample-file):
+						<blockquote class="doc-commands">
+							cd /usr/local/etc/rc.d/										<br>
+							./proftpd.sh start
+						</blockquote>
+						That was rather painless - take a look at that configure command in the
+						section dedicated to manually compiling proFTPd above and rejoice over the
+						genious of the ports-system.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="proftpd_debian"></a>Installing proFTPd on Debian</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Installing proftpd with MySQL-support is as easy as simply executing the
+						following command (as root):
+						<blockquote class="doc-commands">
+							apt-get install proftpd-mysql
+						</blockquote>
+						After apt-get has finished retrieving the files from your local mirror you will
+						be asked to install proftpd to either run standalone or from inetd - the choice
+						you make depends on how many users a day you're expecting. Inetd is the most
+						fitting choice if you're expecting only a few visitors a day, but then again you
+						wouldn't be here trying to install this tool - so just select standalone and get
+						on with it. Starting and stopping your server can be done as follows:
+						<blockquote class="doc-commands">
+							cd /etc/init.d											<br>
+							./proftpd start
+						</blockquote>
+<!-- ProFTPd -->
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	</td></tr></table>
+
+	<br><br>
+
+	<table class="outerBounds"><tr><td>
+	<table class="box">
+		<tr>
+			<td class="box-headline">&gt;&gt; <A name="admin"></a>Installing proFTPd Administrator</td>
+		</tr>
+		<tr>
+			<td>
+			<table class="box" style="border-style: none;">
+				<tr>
+					<td class="box-sel" align="justify">
+<!-- Admin tool -->
+						The following sections outline how you can install successfully install
+						"proFTPd Administrator". If you are considering upgrading I would initially
+						recommend just simply installing the new version in a new folder, but this isn't
+						always easy to do with a live database - for that reason I've also added a few
+						instructions so that you can upgrade from an earlier version. Instructions have
+						been added cummulative - this means that if you're using version 0.6 you should
+						follow the instructions for upgrading from versions below 0.7, 0.8 and finally 0.9.
+						<blockquote>
+							&gt;&gt; <a href="#admin_install">	Installing proFTPd Administrator	</a><br>
+							&gt;&gt; <a href="#admin_update07">	Upgrading from versions <= 0.7		</a><br>
+							&gt;&gt; <a href="#admin_update08">	Upgrading from versions <= 0.8		</a><br>
+							&gt;&gt; <a href="#admin_update09">	Upgrading from versions <= 0.9		</a><br>
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="admin_install"></a>Installing proFTPd Administrator</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Fetch the source-code from the projects homepage (link: <a href="http://sourceforge.net/projects/proftpd-adm/" target="_blank">
+						http://sourceforge.net/projects/proftpd-adm/</a>). Find the location where you
+						saved the tarball and then just run through the following set of commands:
+						<blockquote class="doc-commands">
+							tar xfvz proftpd_admin_v1.0.tar.gz								<br>
+							cd proftpd_admin_v1.0
+						</blockquote>
+						I would like to say that was all that was needed, but we still need to set up
+						a few directories (where we're going to house our files). First we'll have to
+						set up a few MySQL-tables to hold our authentication information as well as
+						logs, but first you'll have to do a bit of editing. Open up the file
+						"misc/database_structure_mysql/db_structure.sql" in your favourite editor and gander
+						at the three last lines. Where it says "&lt;database_password&gt;" you should
+						replace it with a password of your own choice (this is the password proFTPd
+						will be using to gain access to your database). With that out of the way we're
+						ready to set up the database with this next command:
+						<blockquote class="doc-commands">
+							mysql -u root -p < misc/database_structure_mysql/db_structure.sql
+						</blockquote>
+
+						The next step is setting up some of the more basic settings in the configuration
+						files used by this tool - take note that if you are using PHP5 you can skip this
+						step and instead just use the web-based configuration implemented within the
+						tool.<br><br>
+
+						<b>PHP5:</b><br>
+						<blockquote>
+							If you intend to configure the tool using while using PHP5 you have to enable
+							write access to the configuration-file, "configuration.xml" - this can be
+							done as follows (after this you just browse to the page and select the
+							configuration-tab):
+							<blockquote class="doc-commands">
+								chmod o+w configuration.xml
+							</blockquote>
+						</blockquote>
+
+						<b>PHP4:</b><br>
+						<blockquote>
+							If you're still using PHP4 I highly recommend upgrading to PHP5, but if this isn't
+							an option you're not completely out of luck allthough somewhat challenged if editing
+							configuration-files manually is a problem for you.
+							<br><br>
+							The next thing is as mentioned earlier editing proFTPd Administrators's own
+							configuration file ("include_config_oldstyle.php") to your liking - the only thing
+							that actually does need editing is where it
+							says $config_database_user and $config_database_passord. You can enter "root" as
+							the username, as well the password you set when we installed MySQL (using root-access
+							isn't recommended, but then again this tool was never meant to be accessible to anyone
+							other than you anyway).
+						</blockquote>
+
+						Whichever version of PHP you use (4 or 5) you can use the basic functionality of this
+						tool as long as you get the database-credentials correct, but in order to take
+						advantage of all the other neat functionality you will also need to make sure that the
+						configuration points to the corrects paths for a selection of different utilities that
+						should already be present on your system.
+						<br><br>
+
+						The next step will be copying the sample configuration
+						file for proFTPd and setting up that file (first edit it, it's path is
+						"misc/sample_config/proftpd.conf" - if you want support for quotas you probably
+						want to use "misc/sample_config/proftpd_quota.conf" instead). There are three values in this file that
+						you need to change, &lt;database_name&gt; (just set to "proftpd_admin"),
+						&lt;database_user&gt; (just enter "proftpd") and &lt;database_password&gt;
+						(enter the same password you did when editing the file "db_structure.sql").
+						Now just copy the sample configuration into place:
+						<blockquote class="doc-commands">
+							cp misc/sample_config/proftpd.conf /usr/local/etc/proftpd.conf
+						</blockquote>
+						New for version 1.0 of this package is the ability to move logs out of the database
+						and into simple text-based files - the point of this is to somewhat offload the database,
+						but this is not absolutely necessary unless you want to.
+						<blockquote class="doc-commands">
+							chmod -R o+w logs
+						</blockquote>
+
+						Now that we're finished setting up proFTPd Administrator it's time to just move the
+						entire folder into place (were place is in your Apache servers document-root).
+						Next we'll just finish up some of the commands needed for the default configuration
+						of proFTPd and proFTPd Administrator to work as expected, and the first thing we need
+						to do is create the folder where we'll place our files so just follow my lead (if
+						you want to place it somewhere else you'd need to reconfigure both proFTPd and proFTPd
+						Administrator):
+						<blockquote class="doc-commands">
+							cd /												<br>
+							mkdir ftp											<br>
+							cd ftp												<br>
+							mkdir incoming										<br>
+							chmod o+w incoming									<br>
+						</blockquote>
+						Now you should be good to go. I recommend using this tool to make a group for
+						ordinary users, as well as actually adding some users. Have fun!
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="admin_update07"></a>Upgrading from versions <= 0.7</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						As a new feature you can now configure everything in this tool by using the
+						pages themselves - this does however require that you've got PHP5 installed
+						and not PHP4. If you're using PHP4 you won't be able to use this functionality
+						and need to do this the old way - the filename has been altered and the parts
+						that need to be configured can now be found in the file called "include_old_config.php"
+						for version 0.7, and "include_config_oldstyle.php" for versions 0.8 and above.
+						<br><br>
+						To use the configuration feature available to users of PHP5 you need to give the
+						web-server write-access to the configuration file. The following command will
+						make this work:
+						<blockquote class="doc-commands">
+							chmod o+w configuration.xml
+						</blockquote>
+						There are however more security focused solutions that can make the system a
+						little bit more secure, and although a little more detailed you can check out
+						one alternative method <a href="#q011">here</a>.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="admin_update08"></a>Upgrading from versions <= 0.8</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						This section applies if you are using proFTPd Administrator version 0.8 and want
+						to upgrade to version 0.9, and you are planning to use the functionality for
+						quota support (I recommend doing this anyway in case you'd want to in the future).
+						<br><br>
+						Version 0.9 introduced quota support, and at the same time altered the database
+						- two tables were added, and these need to be added to your configuration. The
+						SQL-queries needed to perform this updated has been placed in a file of it's own
+						and can be found at "misc/database_structure/upgrade_to_v0.9.sql" - the file
+						assumes that the database you are using is named "proftpd_admin" (you need to
+						alter the file if you intend to use method 1 described below);
+						<br><br>
+						There are several ways of applying this update - I have taken the time to
+						describe two of these, and the are described directly below.
+						<br><br>
+						<span class="error">Method 1:</span><br>
+						This method use the same method of importing SQL-files like we did upon the initial
+						installation of this tool A command like the following should do the trick (as
+						mentioned earlier this assumes that your database is named "proftpd_admin" - if not
+						you need to edit the first line in the file):
+						<blockquote class="doc-commands">
+							mysql -u root -p < misc/database_structure/upgrade_to_v0.9.sql
+						</blockquote>
+
+						<br>
+						<span class="error">Method 2:</span><br>
+						Method 2 is the easiest to perform and is simply using an installed copy of
+						phpMyAdmin to do the work for you. Select the database you're using, and
+						select the SQL-tab. Paste the contents of the sql-file, with the exception
+						of the first line, into the textbox and hit apply.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="admin_update09"></a>Upgrading from versions <= 0.9</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						There mostly isn't all that much to do other than ensure that you have the
+						necessary tables if you intend to use the PowerDNS-extension (see manual-
+						section of the tool for SQL-statements necessary to create them).
+						<br><br>
+						New for version 1.0 of this package is the ability to move logs out of the database
+						and into simple text-based files - the point of this is to somewhat offload the database,
+						but this is not absolutely necessary unless you want to. If you intend to use this
+						you must set file privileges so that the tool can write to the logs-subdirectory.
+						<blockquote class="doc-commands">
+							chmod -R o+w logs
+						</blockquote>
+<!-- Admin tool -->
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	</td></tr></table>
+
+	<br><br>
+
+	<table class="outerBounds"><tr><td>
+	<table class="box">
+		<tr>
+			<td class="box-headline">&gt;&gt; <A name="troubleshooting"></a>Q&amp;A, Troubleshooting</td>
+		</tr>
+		<tr>
+			<td>
+			<table class="box" style="border-style: none;">
+				<tr>
+					<td class="box-sel" align="justify">
+<!-- Troubleshooting -->
+						<blockquote>
+							&gt;&gt; <a href="#q001">Error while loading shared libraries					</a><br>
+							&gt;&gt; <a href="#q002">Error compiling: make[1]: *** [mod_sql_mysql.o] Error 1		</a><br>
+							&gt;&gt; <a href="#q003">Error: too many arguments to function `make_scrambled_password'	</a><br>
+							&gt;&gt; <a href="#q004">Cannot find -lmysqlclient						</a><br>
+							&gt;&gt; <a href="#q007">Users I add through proFTPd admin don't get access			</a><br>
+							&gt;&gt; <a href="#q005">When connecting to the server I get "login incorrect"			</a><br>
+							&gt;&gt; <a href="#q006">When connecting to the server I get "Server closed connection"		</a><br>
+							&gt;&gt; <a href="#q025">When connecting to the server I get "Incorrect password or username"</a><br>
+							&gt;&gt; <a href="#q008">Is there any way to make the create users tool actually create individual directories for each account that is created			</a><br>
+							&gt;&gt; <a href="#q009">Parse error in the file "include_config.php"</a><br>
+							&gt;&gt; <a href="#q010">... consider upgrading MySQL client</a><br>
+							&gt;&gt; <a href="#q011">The configuration file, called "configuration.xml", is NOT writeable ...</a><br>
+							&gt;&gt; <a href="#q012">"Last logout"-field never gets updated</a><br>
+							&gt;&gt; <a href="#q013">SQL-error: Table 'proftpd_admin.ftpquotalimits' doesn't exist</a><br>
+							&gt;&gt; <a href="#q014">Fatal error: Call to undefined function simplexml_load_file() in ...</a><br>
+							&gt;&gt; <a href="#q015">Compiling in support for "mod_quotatab"</a><br>
+							&gt;&gt; <a href="#q016">File listing always empty</a><br>
+							&gt;&gt; <a href="#q017">How do I upgrade?</a><br>
+							&gt;&gt; <a href="#q018">How do I secure this tool?</a><br>
+							&gt;&gt; <a href="#q019">Relative dates always have a time of 00:00:00</a><br>
+							&gt;&gt; <a href="#q020">Is there any way to let users view their account details?</a><br>
+							&gt;&gt; <a href="#q021">do_connect Function not implemented yet!</a><br>
+							&gt;&gt; <a href="#q022">All I get is a blank page</a><br>
+							&gt;&gt; <a href="#q023">I get a blank page with what looks like code on it</a><br>
+							&gt;&gt; <a href="#q024">Ftp users: 0, Server down</a><br>
+							&gt;&gt; <a href="#q100">I like this project, is there any way I can help ?	</a>
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q001"></a>Error while loading shared libraries</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						You encounter the following message when trying to start proftpd:
+						<blockquote class="doc-commands-quote">
+							proftpd: error while loading shared libraries: libmysqlclient.so.12: cannot open shared object file: No such file or directory
+						</blockquote>
+						What this means is that Linux can't find a shared library required by proftpd
+						- and thus leaves proftpd relentlessly un-startable. The solution is to tell
+						Linux where these files can be found, and this can be done by searching for
+						the file called "libmysqlclient.so.12" and add it's path to the end of another
+						file called "ld.so.conf" found in "/etc". Finally execute the command
+						"ldconfig" so that Linux knows that you've updated the "dynamic linker"'s
+						configuration-file.
+						<br><br>
+						If you're using Linux, compiled MySQL from source, and didn't bother to read what
+						I wrote above - just simply execute the following set of commands.
+						<blockquote class="doc-commands">
+							echo "/usr/local/lib/mysql/" >> /etc/ld.so.conf							<br>
+							ldconfig
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q002"></a>Error compiling: make[1]: *** [mod_sql_mysql.o] Error 1</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						The first thing you should do is to scroll up until you find the first point of
+						failure. If the error you got somewhat matches the following:
+						<blockquote class="doc-commands-quote">
+							gcc  -DLINUX  -I.. -I../include -I/usr/ -O2 -Wall -c mod_sql_mysql.c				<br>
+							mod_sql_mysql.c:137:19: mysql.h: No such file or directory					<br>
+							mod_sql_mysql.c:164: error: parse error before "MYSQL"						<br>
+							mod_sql_mysql.c:164: warning: no semicolon at end of struct or union				<br>
+																			<br>
+							--- more errors, but I cut them since they are of no interest to us. ---			<br>
+																			<br>
+							mod_sql_mysql.c: In function `cmd_checkauth':							<br>
+							mod_sql_mysql.c:1295: warning: implicit declaration of function `make_scrambled_password'	<br>
+							make[1]: *** [mod_sql_mysql.o] Error 1								<br>
+							make[1]: Leaving directory `/home/chryz/proftpd-1.2.9/modules'					<br>
+							make: *** [modules] Error 2
+						</blockquote>
+						What this means is that the headers (.h - files) for MySQL could not be found
+						the path you specified with "--with-include" when you ran configure. If you
+						know these files should exist on your system you might try searching for a file
+						called "mysql.h" and use it's path when you rerun configure and retry compilation.
+						<br><br>
+						If you installed MySQL using prepackaged packages these files most probably wasn't
+						included, and must be installed as an extra package. Look for a package called
+						something like "libmysql12-devel" (search for packages with names that contain the
+						string "mysql" and after installing them you should be ready to get going).
+						<br><br>
+						For most prepackaged packages the following configure should work when compiling
+						proFTPd:
+						<blockquote class="doc-commands">
+							./configure --with-modules=mod_sql:mod_sql_mysql --with-includes=/usr/include/mysql/ --with-libraries=/usr/lib/mysql/
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q003"></a>Error: too many arguments to function `make_scrambled_password'</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						I encountered this problem when trying to compile proftpd 1.2.9 on FreeBSD, and as
+						far as I could see there is no other solution to the problem other than simply
+						to download and compile proftpd 1.2.10 instead (which didn't seem to have this
+						problem). Full error message below.
+						<blockquote class="doc-commands-quote">
+							mod_sql_mysql.c: In function `cmd_checkauth':							<br>
+							mod_sql_mysql.c:1293: error: too many arguments to function `make_scrambled_password'		<br>
+							*** Error code 1
+						</blockquote>
+						If someone has a better solution to this problem, they're welcome to send me an e-mail
+						and I'll add the solution here.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q004"></a>Cannot find -lmysqlclient</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						When compiling proFTPd is almost at an end you encounter the following error-message:
+						<blockquote class="doc-commands-quote">
+							/ld: cannot find -lmysqlclient									<br>
+							collect2: ld returned 1 exit status								<br>
+							make: *** [proftpd] Error 1
+						</blockquote>
+						This means that the compiler could not find the libraries for MySQL. You specify
+						where these libraries can be found with the "--with-libraries"-parameter when running
+						configure. Try searching for "libmysqlclient.so" and supply it's path when running
+						configure like this:
+						<blockquote class="doc-commands">
+							./configure --with-modules=mod_sql:mod_sql_mysql --with-includes=/usr/include/mysql/ --with-libraries=/usr/lib/mysql/
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q007"></a>Users I add through proFTPd admin don't get access</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Before we continue you should first try to start the server in debug-mode as well
+						as consult the log files like the the two following sections discuss:
+						<blockquote>
+							&gt;&gt; <a href="#q005">When connecting to the server I get "login incorrect"			</a><br>
+							&gt;&gt; <a href="#q006">When connecting to the server I get "Server closed connection"		</a><br>
+							&gt;&gt; <a href="#q024">When connecting to the server I get "Incorrect password or username"</a>
+						</blockquote>
+						If that didn't work try checking that the proftpd-server loads the correct
+						configuration-file and not a residual configuration-file from an earlier
+						installation of proFTPd. Check that there are no other "proftpd.conf"-files
+						accidentaly being loaded instead (remove or move them to another location -
+						the one we want to keep is "/usr/local/etc/proftpd.conf").
+						<br><br>
+						With one of the later releases of MySQL the procedure used for "encrypting"
+						passwords were changed while the same changes weren't made in proftpd until
+						version 1.3RC1. Using a later version of MySQL (4 and up) with proftpd version
+						1.2.10 (latest stable at time of writing) would result in the server reporting
+						that you've entered the wrong password. One option for solving this problem is
+						either upgrading proftpd to a recent enough version or setting proFTPd
+						Administrator to use the old password format (use sub-type for old passwords in
+						database configuration) - any passwords already set must be reset to ensure that
+						the old password format is used.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q005"></a>When connecting to the server I get "login incorrect"</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						The cause of this error may be unclear, but thankfully proftpd comes with a set
+						of functions that can easy debugging considerably when chasing down problem such
+						as this one. The first thing you should do is to shut down the ftp-server
+						(you can use "kill `cat /var/run.proftpd.pid`") if that is where your pid-file is
+						located. Next we'll start up the server again, but with debugging and error messages
+						sent to your console (debug level 1 should be enough, but you can increase the
+						number if it doesn't present you with anything usefull):
+						<blockquote class="doc-commands">
+							proftpd -n -d 1
+						</blockquote>
+						Look through the output for messages describing some or other error that has
+						occured. A rather familiar error message for my part is shown below:
+						<blockquote class="doc-commands-quote">
+							local_ftp - ProFTPD 1.2.9 (stable) (built Sat Jul 3 16:10:46 CEST 2004) standalone mode STARTUP	<br>
+							local_ftp  (192.168.0.x[192.168.0.x]) - FTP session opened.					<br>
+							local_ftp  (192.168.0.x[192.168.0.x]) - USER chryz: Login successful.				<br>
+							local_ftp  (192.168.0.x[192.168.0.x]) - Preparing to chroot() the environment, path = '~/'	<br>
+							local_ftp  (192.168.0.x[192.168.0.x]) - chryz chroot("~/"): No such file or directory		<br>
+							local_ftp  (192.168.0.x[192.168.0.x]) - error: unable to set default root directory		<br>
+							local_ftp  (192.168.0.x[192.168.0.x]) - FTP session closed.
+						</blockquote>
+						What this error message means is that the login was successfull, but it didn't work
+						nonetheless - thus login incorrect. The culprit here was that my user had been set to
+						use a "home directory" that did not exist. If this is the standard behavior for newly
+						created users, you should considering "$config_ftp_default_home" in the file called
+						"include_config.php" included in proftpd admin.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q006"></a>When connecting to the server I get "Server closed connection"</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						This message usually means a fatal error of some kind has occured on the ftp-server.
+						Relax! ,- this doesn't mean that it actually caught fire or something like that -
+						it only	means that there is an error in the configuration. Most of the time the culprit
+						has something to do with the username and password used by the ftp-server to
+						access your mysql-database.
+						<br><br>
+						To battle these and more sorts of problem, consider starting your ftp-server in
+						debug mode (execute "proftpd -d 9 -n") and check out the contents of your log
+						files. If you used the configuration file that came with proftpd-admin you'll
+						have these config files:
+						<ul>
+							<li>/var/log/proftpd.access_log
+							<li>/var/log/proftpd.auth_log
+							<li>/var/log/proftpd.mysql
+							<li>/var/log/proftpd.paranoid_log
+							<li>/var/log/proftpd.xferlog
+						</ul>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q025"></a>When connecting to the server I get "Incorrect password or username"</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						You may find that with some combinations of the proftpd-server and
+						MySQL-server the password format may be differing leading to all passwords
+						being seen as incorrect even though they are entered correctly. A workaround
+						for this exists in proftpd-administrator version 1.1 and is used by setting
+						the usage of the old password format on the settings page for the database-
+						server - ie. setting MySQL subtype as "Old database password format". Any
+						passwords set on users added previously must be changed after this change to
+						the configuration has been made.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q008"></a>Is there any way to make the create users tool actually create individual directories for each account that is created</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Due to requests I've added a simple way of doing this in proFTPd Admin v0.6 -
+						in the config file you can set a script to run every time a user is created (a
+						sample script is included in "misc/user_create"). Take note that when we later
+						refer to this script in configuration files - you have to include the entire
+						path. For sake of discussion we'll from now on assume that the proftpd_admin
+						tool has been extracted and placed in "/www/ftp_admin/".
+
+						<br><br>
+
+						Running the script to alter permissions and creating homedirectories will most
+						certainly require root-access from the script - because of security considerations
+						we most certainly don't want to run the web-server (I however do assume in the
+						configuration-bit below that the server is run as the user "nobody") as root to
+						accomplish this. Thankfully a tool called sudo will make all this happen for us,
+						but first sudo has to be set up properly - edit the file "/etc/sudoers" and add
+						the following few lines:
+
+						<blockquote class="doc-commands-quote">
+							# Cmnd alias specification						<br>
+							Cmnd_Alias CREATE_USER = /www/ftp_admin/misc/user_script/create_user.sh	<br><br>
+
+							# User privilege specification						<br>
+							nobody ALL=(ALL) NOPASSWD: CREATE_USER
+						</blockquote>
+						Now all we have to do is make sure that proFTPd-admin is aware of the scripts-
+						location, and that is done by editing "/www/ftp_admin/include_config.php" to
+						something like this:
+						<blockquote class="doc-commands-quote">
+							$config_createuser_command = "sudo /www/ftp_admin/misc/user_script/create_user.sh";
+						</blockquote>
+						All the pieces should now be in place and all that needs to be done is actually edit the
+						file and make it do what we initially wanted it to do (create hodedirectory as well as
+						setting the correct user and group ownerships.). The completed script could look something
+						like the following (based on our example script):
+						<blockquote class="doc-commands-quote">
+							#!/bin/bash						<br>
+							USER=$1							<br>
+							USER_ID=$2						<br>
+							GROUP_ID=$3						<br><br>
+
+							mkdir -p /ftp/$USER					<br>
+							chown $USER_ID.$GROUP_ID /ftp/$USER
+						</blockquote>
+						There is one task remaining and that is making sure that our security has not been
+						weakened due to the creation of our script (letting ordinary users overwrite something
+						that is run by sudo is a major security-flaw) by altering the permissions on the script
+						used by running the following set of commands:
+						<blockquote class="doc-commands">
+							chown -R root.root /www/ftp_admin/misc/user_script	<br>
+							chmod 700 -R /www/ftp_admin/misc/user_script
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q009"></a>Parse error in the file "include_config.php"</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						You are probably using version 0.7 of this tool, and upon starting to use
+						the tool everything you get is an error message stating that a so-called
+						"Parse error" has occured. The following is the entire error message:
+						<blockquote class="doc-commands-quote">
+							Parse error: parse error, unexpected '=', expecting ')' in /path_to_ftpadmin/include_config.php on line 45
+						</blockquote>
+						This error was caused due to the introduction of some PHP5 specific code
+						into the application, and I released version 0.7 before properly testing
+						it on a machine running any version of PHP4 (sorry about that). Thankfully
+						the solution is as simple as either upgrading to version 0.8 or downgrading
+						to version 0.6.1. Most of the added features since version 0.6.1 require that
+						you use PHP5, and although these shouldn't result in errors for new versions
+						(no guarantee) you're missing out on the fun.
+						<br><br>
+						In conclusion: Either upgrade to "proFTPd Administrator" version 0.8 or
+						more preferably - upgrade to PHP5.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q010"></a>... consider upgrading MySQL client</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						You recently upgraded, or did a new installation of PHP4 (PHP5 does not have
+						this problem) and can't use this tool. Some earlier versions of "proFTPd
+						administrator" might simply state that there are some problem with the
+						provided MySQL username/password - version 0.8 is a lot more helpfull and will
+						display the following series of errors:
+						<blockquote class="doc-commands-quote">
+							do_connect		Connection to database with credentials user@host		<br>
+							do_connect		Connecting to database failed with errors: Client
+											does not support authentication protocol requested by
+											server; consider upgrading MySQL client					<br>
+							do_select_db	Selecting database "proftpd_admin"						<br>
+							do_select_db	Can't select database, not connected to database server
+						</blockquote>
+						The makers of the MySQL database altered the way they store their passwords in
+						their database, but the older included PHP framework does not support this and
+						results in an error stating that you should "consider upgrading MySQL client".
+						This functionality has been added in PHP5 and should not be a problem if you
+						opt for upgrading to PHP5 instead of using PHP4.
+						<br><br>
+						For production enviroments PHP4 still see a lot of use, but to fix the error
+						you'll need to recompile PHP - better soon than later since you'll probably
+						encounter this problem in other PHP-based "applications" at some point in the
+						near future. What you need to do is to specify the support code for MySQL while
+						running the configure part of compiling the software. Use a configure statement
+						such as the following:
+						<blockquote class="doc-commands">
+							./configure --with-mysql=/usr/local --with-apxs2=/usr/local/apache2/bin/apxs
+						</blockquote>
+						Substitute the parts that don't match on your system. The important part is
+						pointing to where the include-files for MySQL is located - the example shown here
+						assume that these files are located in "/usr/local/include/mysql/". If you can't
+						locate these files on your computer; try searching for one of the files that
+						belongs in this directory - a file such as "mysql_time.h". If you installed MySQL
+						from binary and want to install PHP from source, and can't find the files I'm
+						talking about - make sure you've installed the MySQL development pack.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q011"></a>The configuration file, called "configuration.xml", is NOT writeable ...</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						You are using PHP5, and trying to use the inbuilt configuration feature
+						implemented in the newer versions of "proFTPd Administrator" with the
+						result of only facing the following error:
+						<blockquote class="doc-commands-quote">
+						 	The configuration file, called "configuration.xml", is NOT writeable and you can
+						 	not alter any of the settings before you have given the web-server permission to
+						 	write to this file - check the manual for more information on how to do this.
+						 	Subsections have been hidden until you rectify this error.
+						</blockquote>
+						What this error message actually means is that allthough the server is able to read
+						the configuration file (which for most web-based tools is perfectly fine), but to use
+						the configuration-feature you also need to give the server write permissions to this
+						file. The simplest solution would be to run the following command:
+						<blockquote class="doc-commands">
+							chmod o+w configuration.xml
+						</blockquote>
+						This will work on all configurations, but for those of you that are a bit more security
+						focused might not want this file, a file that contains a username and password for your
+						database server, to be readable by everyone able to log either locally or via a service
+						such as SSH. The following is a little better and assumes that your database is running
+						as the group "nobody" (check web-server configuration):
+						<blockquote class="doc-commands">
+							chgrp nobody configuration.xml	<br>
+							chmod 660 configuration.xml
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q012"></a>"Last logout"-field never gets updated</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						When viewing details for a specific user there is a field called "Last logout", and if
+						you find that this field never gets upgraded then this problem affects you. The reason
+						for this is a bug in ProFTPd that was introduced with ProFTPd 1.2.10, previous versions
+						don't seem to be affected. The problem lies in ProFTPd killing the process serving the
+						client before the update has had a chance to be applied. Hopefully this issue will get
+						resolved in a newer version of ProFTPd.
+						<br><br>
+						This error has been fixed in ProFTPd 1.3.0, but you should wait until this version of
+						the server has reached "stable" before updating as this is merely a cosmetic error.
+						Version 1.3.0rc1 has some wierd problems with the current configuration, but this is
+						assumed to be fixed in the final release - until that time you should use ProFTPd
+						1.2.10,
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q013"></a>SQL-error: Table 'proftpd_admin.ftpquotalimits' doesn't exist</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						This error applies to you if you've just upgraded to proFTPd Administrator
+						version 0.9, and get this error on the bottom of some of the pages. The reason for this
+						is that you've activated support for Quota, but you haven't upgraded the database to
+						include updates made in v0.9. To upgrade the database  - see the following section:
+						<blockquote>
+							&gt;&gt; <a href="#admin_update08">Update for versions <= 0.8 </a>
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q014"></a>Fatal error: Call to undefined function simplexml_load_file() in ...</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						This error can occur on installations of PHP5 where support for XML has been left out -
+						ie. configure was running with the parameters "--disable-libxml" and/or "--disable-simplexml"
+						(this will leave out XML-support and negate the need to install libxml2 - appearantly a file
+						missing from Mandrake 10.0 Community Edition). When opening any page for this tool you'll be
+						met by an error message due to a PHP parser error - the full error message is as follows:
+						<blockquote class="doc-commands-quote">
+							<b>Fatal error:</b> Call to undefined function simplexml_load_file() in file "include_config_utils.php" on line 19
+						</blockquote>
+						To fix this I highly recommend that you install libxml2 and recompile PHP5 without explicitly
+						removing XML-support. If that isn't an option there is a way out of this mess by enforcing
+						the pages to use the older PHP4 configuration file, "include_config_oldstyle.php", by opening
+						up the file "include_config.php" in an editor and find the line that looks as follows:
+						<blockquote class="doc-commands-quote">
+							$config_enforce_oldstyle_config = false;
+						</blockquote>
+						Alter this line so that it reads as follows:
+						<blockquote class="doc-commands-quote">
+							$config_enforce_oldstyle_config = true;
+						</blockquote>
+						Note however that this method will only work on proFTPd Administrator version 0.9 or later, so
+						make sure to update the tool - this error shouldn't happen on PHP4 since it doesn't support
+						this functionality in the first place. As mentioned earlier you'd be doing yourself a favour by
+						updating to PHP5 (with XML support).
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q015"></a>Compiling in support for "mod_quotatab"</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Adding support for "mod_quotatab" may be easier than it sounds, but there is a chance you'll
+						have to do this yourself - ie. recompiling proftpd. Before going to those extends you should
+						first check if you happen to already have the support we need - run the following command
+						and examine the output:
+						<blockquote class="doc-commands">
+							proftpd -l
+						</blockquote>
+						A list of the compiled in modules should now be listed - compare this to the following list
+						of needed modules:
+						<blockquote>
+							&gt;&gt; mod_sql.c<br>
+							&gt;&gt; mod_sql_mysql.c<br>
+							&gt;&gt; mod_quotatab.c<br>
+							&gt;&gt; mod_quotatab_sql.c
+						</blockquote>
+						If one or more of these modules are missing you should either consider checking to see if
+						there are any other packaged versions of proftpd that includes these modules, or you could
+						skip right to the solution that is most likely - recompiling it yourself.
+						<br><br>
+						To recompile the server you can simply follow the steps outlined in the install section in
+						this document, but if you're impatient and are used to compiling software you can stay
+						tuned for the short version.
+						<br><br>
+						<span class="error">Short version:</span><br>
+						Recompile the software, but this time alter some of the parameters when running configure -
+						in short do something like this:
+						<blockquote class="doc-commands">
+							./configure --with-modules=mod_sql:mod_sql_mysql:mod_quotatab:mod_quotatab_sql \<br>
+							--with-includes=/usr/local/include/mysql/ --with-libraries=/usr/local/lib/mysql/
+						</blockquote>
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q016"></a>File listing always empty</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						If you find that you file listing is always empty this might apply to you - this is an
+						error that has been confirmed on proFTPd version 1.3.0rc1. The cause of this is a bug
+						in the "HideNoAccess"-directive. This directive works fine on version 1.2.10 and below,
+						but assuming you installed a beta version for a reason - you'll, for now, have to set the
+						"HideNoAccess"-directive to "off" until an updated version of proFTPd is avaiable.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q017"></a>How do I upgrade?</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						This is not an easy question due to the various different versions of both this tool and
+						PHP and for the most part I would recommend that you place the new version in a new
+						directory and install it as you first did by following the details sketched out for you
+						in this document (this does not apply for the database-specific parts.). There is relevant
+						information for how to do this in the install section.
+						<blockquote>
+							&gt;&gt; <a href="#admin_install">	Installing proFTPd Administrator	</a><br>
+							&gt;&gt; <a href="#admin_update07">	Upgrading from versions <= 0.7		</a><br>
+							&gt;&gt; <a href="#admin_update08">	Upgrading from versions <= 0.8		</a><br>
+							&gt;&gt; <a href="#admin_update09">	Upgrading from versions <= 0.9		</a><br>
+						</blockquote>
+
+						The xml-based configuration-file, "configuration.xml", used by PHP5 enabled servers can be
+						copied directly to the new versions directory. The next thing you should do is go to
+						the configuration-tab in the new version of this tool and press submit on any of the
+						pages - this should take care of updating the configuration-file for use with your new copy
+						of proFTPd Administrator.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q018"></a>How do I secure this tool?</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						This tool doesn't have any built in security, but considering the nature of the
+						application this wouldn't be the level where you'd want to secure it since global
+						access means a security risk no matter the quality of the implementation (exposure
+						always means that it's only a matter of time, and a login-system built into proFTPd
+						Administrator would be not be sufficient and would actually serve as a false sense
+						of security - much like the much flaunted "anti"-virus functionality found on your
+						computer BIOS). In other words you need to add the required security you yourself
+						have a need for.
+						<br><br>
+
+						The key is focusing on the servers that this application runs on top off:
+						<ul>
+							<li>Web server (ie. Apache)</li>
+							<li>MySQL</li>
+							<li>PHP</li>
+						</ul>
+						The intended purpose is that you install these on your dedicated ftp-server and
+						administrate it via this tool - and nothing else. You then firewall out all, but
+						your own IP as well as set up basic access controls from within Apache.
+						<br><br>
+
+						I usually set it up so that the web server only listens on IP 127.0.01 (firewall
+						out port 80 on all other interfaces just to be sure). You then use SSH to set up
+						a tunnel to the computer (for extra security, use keys instead of ordinary
+						passwords), and administrate via that. This also allows you to securely
+						use ProFTPd Administrator, PHPMyAdmin, PHPSysInfo without the exposure. If done
+						correctly the only ports exposed to the public should be 21 (FTP) and 22 (SSH) -
+						in doubt use nmap from an external machine to check what services are exposed.
+						<br><br>
+
+						If you absolutely have to use it on the same server as web-pages open to the public
+						either set up an additional web-server on the same machine or use something like
+						virtual hosting (make sure you get it right as to not inadvertently expose critical
+						information) - I don't recommend using this solution, but it may be sufficient for
+						you if you take care setting it up.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q019"></a>Relative dates always have a time of 00:00:00</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						When you select expiration dates for accounts as well as use any of the drop down
+						menues used to select dates that are relative to the current time - you may find
+						that the dates are correct, but the time is allways set to midnight that day. This
+						is caused by a documented bug in PHP, and only applies to PHP version 5.0.0 - 5.0.2.
+						In other words you'll have to upgrade in order to see this bug go poof.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q020"></a>Is there any way to let users view their account details?</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						Starting with version 1.0 of the software I've included a subset of this tool that
+						can be found in <i>misc/user_info</i> that can be used in order to allow users to
+						log on and view their account details including available transfer logs as well as
+						the current quota.
+						<br><br>
+						This subset of code uses the same format configuration as the rest of the tool meaning
+						you have the option of linking to the main-tools configuration, copying the current
+						configuration used with proFTPd Administrator or simply make a new one specifically for
+						this part of the package - I recommend the two latter since they give you the ability
+						configure a MySQL-user with less privileges than the one required by the main tool.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q021"></a>do_connect Function not implemented yet!</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						This error is caused by the fact that you haven't or have erroneously configured the
+						database-connection that is used by this tool. This can easily be rectified by going
+						to the configure-tab and reconfiguring database-access if you are using PHP5 (if that
+						doesn't work compare your configuration.xml with the default one that comes with the
+						package), or by manually editing the file "include_config_oldstyle.php" if you are
+						still using PHP4.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q022"></a>All I get is a blank page</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						I've had reports about this problem on some configurations, but the one that seems to
+						stand out in the crowd is Debian "Etch". In most cases the reason for this is either
+						a misconfigured PHP/Apache-setup or in some cases the parser itself crashing - on the
+						forementioned Debian version this is most commonly caused by a configuration trying to
+						load an old PHP4-installation as well as the newer PHP5 which understandably enough
+						doesn't work.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q023"></a>I get a blank page with what looks like code on it</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						This error only occurs on a few configurations, again with Debian "Etch" one of the
+						most represented, and is caused by a typo most installations ignore. If you encounter
+						this problem you should upgrade to proFTPd Administrator v1.1 which encorporates a
+						fix.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q024"></a>Ftp users: 0, Server down</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						If the status screen displays this message as well as the main page not showing any
+						connected users your problems are most probably related to either a misconfigured
+						path to the ftpwho-utility or the utility itself not running properly, but before
+						continueing please make sure that the server is actually running.
+						<br><br>
+						One thing that you should check first is that the ftpwho-utility runs from the command-
+						line without any errors as any error messages here may indicate a problem with the
+						server configuration. Other than that you should take note that the utility on the
+						administration page will be run with the same privileges as the web-server so that if
+						this user can't access your scoreboard-file (path configured in "proftpd.conf") then
+						neither can the utility. As a quick fix try giving <i>other</i> read access to the file
+						as well as all directories leading up to it.
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+				<tr><td class="box-subheadline" style="text-align: left;">&gt;&gt; <A name="q100"></a>I like this project, is there any way I can help ?</td></tr>
+				<tr>
+					<td class="box-sel" align="justify">
+						If there are features that aren't working perfectly, or there are ways of
+						improving the way they function you are welcome to give it a try - it is
+						open-source after all. Especially when it comes to the status-part of the
+						page there are several systems I do not have access to, and therefore it
+						is impossible for me to develop the code for them. If you are using
+						NetBSD and OpenBSD, and have some skills with those systems and PHP you
+						could try and make the status-page work on those systems.
+						<br><br>
+						Other than that I suck at graphic-design and CSS - so feel free to modify
+						the CSS-files (feel free to use "Easy_Gray" and "Yellow" as a basis for your
+						work). The installation guide (this document) always need more content (be it
+						improvements or guides for installing on other distributions - that's your
+						choice).
+						<br><br>
+						For those of you familiar with PostgreSQL there have been made requests for
+						support for this database server, but as I have no experience with this
+						server I leave that to any willing soul that wants it to work with this
+						tool - the framework has been completed as of version 0.8 so the only thing
+						missing is the actual implementation.
+						<br><br>
+						If you're still not satisfied with the hints given here - feel free to jump
+						to the tools manual-section and check out the section called "Pending features
+						and changes".
+<!-- Troubleshooting -->
+<!-- Installation instructions -->
+					</td>
+				</tr>
+				<tr><td class="box-sel" align="justify">&nbsp;</td></tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	</td></tr></table>
+</body>
+</html>

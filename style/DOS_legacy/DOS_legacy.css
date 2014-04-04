@@ -1,0 +1,243 @@
+A {
+	color:				green;
+	text-decoration:		none;
+	font-weight: 			normal;
+}
+
+A:hover {
+	color: 				lightgreen;
+}
+
+A:active {
+	color: 				lightgreen;
+}
+
+acronym {
+	cursor:				help;
+}
+acronym:hover {
+	border-bottom:			1px solid;
+}
+
+body {
+	background-color: 		black;
+	background:			black url('bg3.png') repeat-y;
+	color:				white;
+	text-decoration: 		none;
+	font-family: 			verdana, helvetica, sans-serif;
+	font-size: 			11px;
+	font-weight: 			normal;
+}
+
+img {
+	border: 			outset 1px;
+	margin: 			0px;
+	padding: 			0px;
+}
+
+img.bar-left {
+	border:				outset;
+	border-width:			1px 0px 1px 1px;
+	border-color: 			darkgreen;
+}
+
+img.bar-right {
+	border:				outset;
+	border-width:			1px 1px 1px 0px;
+	border-color: 			darkgreen;
+}
+
+img.screenshot {
+	border:				inset 1px;
+	padding:			0px 5px 0px 5px;
+}
+
+span.error {
+	color:				red;
+}
+
+span.primarygroup {
+	text-decoration:		underline;
+}
+
+table {
+	border: 			none;
+	margin: 			0px;
+	padding: 			0px;
+}
+
+table.TopMenu {
+	max-width: 			808px;
+	width:				808px;
+	
+	border-style:			solid;
+	border-width: 			1px;
+	border-color: 			green;
+	
+	position: 			relative;
+	top: 				-10px;
+}
+
+td {
+	color:				white;
+	border-style: 			solid;
+	border-width: 			0px;
+	border-color: 			green;
+	font-size: 			11px;
+}
+
+td.box-pl {
+  	font-family:			monospace, sans-serif;
+	border-style:			ridge;
+	border-width: 			0px 0px 1px 0px;
+}
+
+td.box-main_title {
+	background:			url('bg.png');
+	border-style:			ridge;
+	border-width: 			0px 0px 1px 0px;
+
+  	font-family:			monospace, sans-serif;
+  	font-size:			12pt;
+}
+
+td.box-sel {
+  	font-size:			7pt;
+	font-family: 			sans-serif, sans-serif;
+	margin-top: 			-2px;
+	margin-bottom: 			-5px;
+}
+
+td.box-sel-head {
+	color:				lightgreen;
+	text-decoration: 		none;
+	font-family: 			verdana, helvetica, sans-serif;
+	font-size: 			10px;
+	font-weight: 			normal;
+}
+
+td.menu-element-space {
+	width: 				3px;
+}
+
+td.menu-spacer {
+	width: 				15px;
+}
+
+table.outerBounds {
+	max-width: 			750px;
+	width:				750px;
+	
+	border-style: 			none;
+	border-width: 			1px;
+	border-color: 			green;
+	
+	position: 			relative;
+	left: 				10px;
+}
+
+table.box {
+	border-style: 			solid;
+	border-width: 			1px;
+	width:				700px;
+	border-color:			green;
+	color:				#FF9933;
+	background-color:		black;
+}
+
+table.menu_box {
+	border-style: 			solid;
+	border-width: 			1px;
+	width:				700px;
+	border-color:			green;
+	color:				#FF9933;
+}
+
+td.box-headline {
+	background:			url('bg.png');
+	border-width: 			0px 1px 1px 1px;
+  	font-style: 			oblique;
+	background-color: 		#304830;
+	text-align:			left;
+	text-indent:			10px;
+
+  	font-family:			monospace, sans-serif;
+  	font-size:			12pt;
+}
+
+td.box-subheadline {
+	color:				white;
+	background:			url('bg.png');
+	border-width: 			1px 0px 1px 0px;
+	background-color: 		#304830;
+	text-align:			center;
+
+  	font-family:			monospace, sans-serif;
+  	font-size:			10pt;
+}
+
+td.box-subheadspace {
+	line-height:			25px;
+}
+
+td.leaflet {
+	background:			url('bg2.png');
+	border-width: 			0px 1px 1px 1px;
+  	font-size:			7pt;
+  	font-family:			verdana, sans-serif;
+	background-color: 		#222222;
+	width:				70px;
+}
+
+tr.overRow {
+	background:			url('bg2.png');
+}
+
+input {
+	color: 				white;
+	border-width: 			0px 1px 1px 0px;
+	border-style:			dashed;
+	border-color:			green;
+	text-decoration: 		none;
+	font-family: 			verdana, helvetica, sans-serif;
+	font-size: 			10px;
+	font-weight: 			normal;
+	background-color: 		black;
+}
+
+input.radio {
+	border:				none;
+}
+
+select {
+	color: 				white;
+	border-width: 			0px 1px 1px 0px;
+	border-style:			dashed;
+	border-color:			green;
+	text-decoration: 		none;
+	font-family: 			verdana, helvetica, sans-serif;
+	font-size: 			10px;
+	font-weight: 			normal;
+	background-color: 		black;
+}
+
+textarea {
+	color: 				white;
+	border-width: 			0px 1px 1px 0px;
+	border-style:			dashed;
+	border-color:			green;
+	text-decoration: 		none;
+	font-family: 			verdana, helvetica, sans-serif;
+	font-size: 			10px;
+	font-weight: 			normal;
+	background-color: 		black;
+}
+
+
+blockquote.doc-commands {
+	color: 				#C0C0C0;
+}
+
+blockquote.doc-commands-quote {
+    color: 				#C6829F;
+}
