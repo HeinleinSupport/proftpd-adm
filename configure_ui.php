@@ -83,6 +83,7 @@
 					<td width="*" class="box-sel" align="right">
 						<select name="frm_ui_language" style="width: 192px;">
 							<option value="english"   <?php if (@$config_language == 'english') echo 'selected'; ?>>English</option>
+							<option value="german"   <?php if (@$config_language == 'german') echo 'selected'; ?>>German</option>
 							<option value="hungarian" <?php if (@$config_language == 'hungarian') echo 'selected'; ?>>Hungarian</option>
 							<option value="norwegian" <?php if (@$config_language == 'norwegian') echo 'selected'; ?>>Norwegian</option>
 						</select>

@@ -11,6 +11,9 @@ else {
 		case 'english':
 			require_once('language_english.php');
 			break;
+		case 'german':
+			require_once('language_german.php');
+			break;
 		case 'hungarian':
 			require_once('language_hungarian.php');
 			break;
