@@ -17,6 +17,7 @@ CREATE TABLE usertable (
   det_mail tinytext,
   det_adress tinytext,
   det_notes tinytext,
+  sshkey varchar(255),
   PRIMARY KEY  (uid)
 ) TYPE=MyISAM;
 
