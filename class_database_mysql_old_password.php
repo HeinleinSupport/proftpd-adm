@@ -10,15 +10,15 @@ class MySQL_OLD extends MySQL {
 	}
 
 	function do_add_user($username, $password, $homedir, $shell,
-						 $main_group, $expiration, $disabled,
-						 $name, $mail, $address, $notes) {
+			     $main_group, $expiration, $disabled,
+			     $name, $mail, $address, $notes, $sshkey) {
 		$this->log_add_debug('do_add_user', 'Adding user, details in next "__do_basic_query"');
 		$this->__do_basic_query('INSERT INTO usertable SET userid="' . $username .
 							  '", passwd=OLD_PASSWORD("' . $password . '"), homedir="' . $homedir .
 							  '", shell="' . $shell . '", gid="' . $main_group . '", expiration="' .
 							  $expiration . '", disabled="' . $disabled . '", det_name="' . @$name .
 							  '", det_mail="' . @$mail . '", det_adress="' . @$address .
-							  '", det_notes="' . @$notes . '"');
+							  '", det_notes="' . @$notes . '", sshkey="' . @$sshkey . '"');
 		$this->last_added_userid = mysql_insert_id($this->connection_handle);
 	}
 

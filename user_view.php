@@ -47,7 +47,7 @@ if (isset($_GET["viewID"]) && strlen($_GET["viewID"]) != 0) {
 	}
 
 	if (isset($_POST["frm_disabled"])) {
-		$db->do_set_user($_GET["viewID"], $_POST["frm_shell"], $_POST["frm_disabled"], $_POST["frm_homedir"], @$_POST["frm_name"], @$_POST["frm_mail"], @$_POST["frm_adress"], @$_POST["frm_notes"]);
+	  $db->do_set_user($_GET["viewID"], $_POST["frm_shell"], $_POST["frm_disabled"], $_POST["frm_homedir"], @$_POST["frm_name"], @$_POST["frm_mail"], @$_POST["frm_adress"], @$_POST["frm_notes"], @$_POST["frm_sshkey"]);
 	}
 
 	if (isset($_POST["frm_password1"]) && isset($_POST["frm_password2"]) && strlen($_POST["frm_password2"]) != 0 && $_POST["frm_password1"] == $_POST["frm_password2"]) {
@@ -241,12 +241,8 @@ if ($config_ext['quota']['enabled'] == 1) {
 					<td width="100"   class="box-sel-head" align="left">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="110"   class="box-sel-head" align="left">&nbsp;</td>
-					<td width="100"  class="box-sel" align="left">&nbsp;</td>
-					<td width="*"  class="box-sel">&nbsp;</td>
-					<td width="100"  class="box-sel-head" align="left">&nbsp;</td>
-					<td width="*"  class="box-sel">&nbsp;</td>
-					<td width="100"   class="box-sel-head" align="left">&nbsp;</td>
+					<td width="110"   class="box-sel-head" align="left"><?php echo $GLOBALS['language']['general']['sshkey']; ?>:</td>
+					<td colspan="4"  class="box-sel" align="left"><?php echo $res_data["sshkey"]; ?></td>
 				</tr>
 				<?php
 				if ($config_ext['quota']['enabled'] == 1 && $quota_data['have_quota'] == true && (

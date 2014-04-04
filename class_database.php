@@ -76,7 +76,7 @@ class Database {
 	function get_GID_exists($groupid) { $this->log_additem('get_GID_exists', 'Function not implemented yet!'); }
 
 	// Userlist
-	function do_add_user($username, $password, $homedir, $shell, $main_group, $expiration, $disabled, $name, $mail, $address, $notes) { $this->log_additem('do_add_user', 'Function not implemented yet!'); }
+	function do_add_user($username, $password, $homedir, $shell, $main_group, $expiration, $disabled, $name, $mail, $address, $notes, $sshkey) { $this->log_additem('do_add_user', 'Function not implemented yet!'); }
 	function do_add_quota($username, $quota) { $this->log_additem('do_add_quota', 'Function not implemented yet!'); }
 	function get_group_data($username) { $this->log_additem('get_group_data', 'Function not implemented yet!'); }
 	function get_userlist() { $this->log_additem('get_userlist', 'Function not implemented yet!'); }
@@ -92,7 +92,7 @@ class Database {
 	function do_set_user_primarygroup($userid, $groupid) { $this->log_additem('do_set_user_primarygroup', 'Function not implemented yet!'); }
 	function do_user_joingroup($username, $groupid) { $this->log_additem('do_user_joingroup', 'Function not implemented yet!'); }
 	function do_user_leavegroup($username, $groupid) { $this->log_additem('do_user_leavegroup', 'Function not implemented yet!'); }
-	function do_set_user($userid, $shell, $disabled, $homedir, $det_name, $det_mail, $det_adress, $det_notes) { $this->log_additem('do_set_user', 'Function not implemented yet!'); }
+	function do_set_user($userid, $shell, $disabled, $homedir, $det_name, $det_mail, $det_adress, $det_notes, $sshkey) { $this->log_additem('do_set_user', 'Function not implemented yet!'); }
 	function do_set_quota($username, $quota_persession, $quota_limittype, $upload_byteondisk, $download_bytefromdisk, $transfer_byteinout, $upload_fileondisk, $download_filefromdisk, $transfer_fileinout) { $this->log_additem('do_set_quota', 'Function not implemented yet!'); }
 	function do_add_vhuser($username, $homedir, $uid, $pdns, $type, $content, $ttl, $prio) { $this->log_additem('do_add_vhuser', 'Function not implemented yet!'); }
 	function do_delete_vhuser($uid) { $this->log_additem('do_delete_vhuser', 'Function not implemented yet!'); }
