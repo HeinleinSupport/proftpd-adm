@@ -164,15 +164,15 @@ class MySQL extends Database {
 
 	/* Userlist **************************************************************/
 	function do_add_user($username, $password, $homedir, $shell,
-						 $main_group, $expiration, $disabled,
-						 $name, $mail, $address, $notes) {
+			     $main_group, $expiration, $disabled,
+			     $name, $mail, $address, $notes, $sshkey) {
 		$this->log_add_debug('do_add_user', 'Adding user, details in next "__do_basic_query"');
 		$this->__do_basic_query('INSERT INTO usertable SET userid="' . $username .
 							  '", passwd=password("' . $password . '"), homedir="' . $homedir .
 							  '", shell="' . $shell . '", gid="' . $main_group . '", expiration="' .
 							  $expiration . '", disabled="' . $disabled . '", det_name="' . @$name .
 							  '", det_mail="' . @$mail . '", det_adress="' . @$address .
-							  '", det_notes="' . @$notes . '"');
+							  '", det_notes="' . @$notes . '", sshkey="' . @$sshkey . '"');
 		$this->last_added_userid = mysql_insert_id($this->connection_handle);
 	}
 	/* Quotalimit **************************************************************/
@@ -327,8 +327,8 @@ class MySQL extends Database {
 		}
 	}
 
-	function do_set_user($userid, $shell, $disabled, $homedir, $det_name, $det_mail, $det_adress, $det_notes) {
-		$this->__do_basic_query('UPDATE usertable SET shell="' . $shell . '", disabled="' . $disabled . '", homedir="' . $homedir . '", det_name="' . @$det_name . '", det_mail="' . @$det_mail . '", det_adress="' . @$det_adress . '", det_notes="' . @$det_notes . '" WHERE uid="' . $userid . '";');
+	function do_set_user($userid, $shell, $disabled, $homedir, $det_name, $det_mail, $det_adress, $det_notes, $sshkey) {
+		$this->__do_basic_query('UPDATE usertable SET shell="' . $shell . '", disabled="' . $disabled . '", homedir="' . $homedir . '", det_name="' . @$det_name . '", det_mail="' . @$det_mail . '", det_adress="' . @$det_adress . '", det_notes="' . @$det_notes . '", sshkey="' . @$sshkey . '" WHERE uid="' . $userid . '";');
 	}
 
 	function do_set_quota($username, $quota_persession, $quota_limittype, $upload_byteondisk, $download_bytefromdisk, $transfer_byteinout, $upload_fileondisk, $download_filefromdisk, $transfer_fileinout) {

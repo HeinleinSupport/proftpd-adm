@@ -33,7 +33,7 @@ function float2int($flt) {
 	settype($int, "integer");
 	return $int;
 }
-
+
 function mb2byte($megabytes) {
 	if ($megabytes == 0) return 0;
 

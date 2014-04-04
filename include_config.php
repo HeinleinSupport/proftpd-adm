@@ -13,7 +13,7 @@ $config_quota_select_datasize				= array(array('v' => 10, 		'd' => '10 MB'),
 													array('v' => 10240, 	'd' => '10 GB'),
 													array('v' => 30720, 	'd' => '30 GB'),
 													array('v' => 51200, 	'd' => '50 GB'));
-$config_valid_shells 						= file('/etc/shells');
+$config_valid_shells 						= array_map(trim, file('/etc/shells'));
 $config_valid_pdns_record_types				= array( "A", "PTR", "TXT", "CNAME", "SOA", "NS", "MX" );
 $config_valid_pdns_domain_types				= array( "NATIVE", "MASTER", "SLAVE" );
 

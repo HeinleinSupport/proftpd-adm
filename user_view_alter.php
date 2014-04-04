@@ -55,6 +55,12 @@
 						<textarea name="frm_notes" rows="2" cols="26" style="width: 236px;"><?php echo @$res_data["det_notes"]; ?></textarea>
 					</td>
 				</tr>
+				<tr>
+					<td width="100" class="box-sel-head" valign="top"><?php echo $GLOBALS['language']['general']['sshkey']; ?>:</td>
+					<td colspan="4" class="box-sel" align="right">
+						<textarea name="frm_sshkey" rows="4" style="width: 100%;" wrap="soft"><?php echo @$res_data["sshkey"]; ?></textarea>
+					</td>
+				</tr>
 			</table>
 		</form>
 		</td>
