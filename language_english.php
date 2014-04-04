@@ -46,6 +46,7 @@ $language['general']['name'] 			= 'Name';
 $language['general']['email'] 			= 'E-mail';
 $language['general']['adress'] 			= 'Adress';
 $language['general']['notes'] 			= 'Notes';
+$language['general']['sshkey']                  = 'SSH public key';
 
 $language['general']['yes'] 			= 'Yes';
 $language['general']['no'] 				= 'No';

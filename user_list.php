@@ -5,7 +5,7 @@ doHeader();
 $cmd_output = '';
 if (isset($_POST["frm_username"]) && strlen($_POST["frm_username"]) != 0 && isset($_POST["frm_homedir"]) && strlen($_POST["frm_homedir"]) != 0 && isset($_POST["frm_password"]) && strlen($_POST["frm_password"]) != 0 ) {
 	if (!$db->get_user_exists($_POST["frm_username"])) {
-		$db->do_add_user($_POST["frm_username"], $_POST["frm_password"], $_POST["frm_homedir"], $_POST["frm_shell"], $_POST["frm_main_group"], $_POST["frm_expiration"], $_POST["frm_disabled"], @$_POST["frm_name"], @$_POST["frm_mail"], @$_POST["frm_adress"], @$_POST["frm_notes"]);
+	  $db->do_add_user($_POST["frm_username"], $_POST["frm_password"], $_POST["frm_homedir"], $_POST["frm_shell"], $_POST["frm_main_group"], $_POST["frm_expiration"], $_POST["frm_disabled"], @$_POST["frm_name"], @$_POST["frm_mail"], @$_POST["frm_adress"], @$_POST["frm_notes"], @$_POST["frm_sshky"]);
 		if ($config_ext['vhosts']['enabled'] == 1) {
 			$uid = $db->get_UIDbyUSERNAME($_POST["frm_username"]);
 			$db->do_add_vhuser($_POST["frm_username"], $_POST["frm_homedir"], $uid);
