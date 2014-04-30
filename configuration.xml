@@ -6,21 +6,21 @@
 		<type>MySQL</type>
 		<sub_type>standard</sub_type>
 		<hostname>localhost</hostname>
-		<username>root</username>
-		<password></password>
+		<username>proftpd</username>
+		<password>dptforp</password>
 		<database>proftpd_admin</database>
 	</database>
 	<proftpd>
 		<generic>
-			<ftp_root>/ftp</ftp_root>
+			<ftp_root>/srv/ftp</ftp_root>
 		</generic>
 		<create_users>
-			<default_homedirectory>/ftp</default_homedirectory>
-			<createuser_command></createuser_command>
+			<default_homedirectory>/srv/ftp/home</default_homedirectory>
+			<createuser_command>/usr/bin/sudo /var/www/html/proftpd-adm/misc/user_script/create_user.sh</createuser_command>
 			<default_shell>/bin/false</default_shell>
 		</create_users>
 		<delete_users>
-			<deleteuser_command>/bin/bash /web/www/home/ftpAdmin/current/misc/user_script/delete_user.sh</deleteuser_command>
+			<deleteuser_command>/usr/bin/sudo /var/www/html/proftpd-adm/misc/user_script/delete_user.sh</deleteuser_command>
 		</delete_users>
 	</proftpd>
 	<user_interface>
@@ -45,11 +45,11 @@
 	</user_interface>
 	<file_paths>
 		<generic>
-			<who>/bin/who</who>
+			<who>/usr/bin/who</who>
 			<df>/bin/df</df>
 			<ps>/bin/ps</ps>
 			<sysctl>/sbin/sysctl</sysctl>
-			<ftpwho>/usr/local/bin/ftpwho</ftpwho>
+			<ftpwho>/usr/bin/ftpwho</ftpwho>
 		</generic>
 		<os_specific>
 			<winnt>
@@ -57,7 +57,7 @@
 			</winnt>
 			<linux>
 				<kernel_configuration>/boot/config</kernel_configuration>
-				<proftpd>/usr/local/sbin/proftpd</proftpd>
+				<proftpd>/usr/sbin/proftpd</proftpd>
 			</linux>
 			<bsd>
 				<kernel_configuration>/usr/src/sys/i386/conf/GENERIC</kernel_configuration>
