@@ -5,19 +5,39 @@ doHeader();
 $cmd_output = '';
 if (isset($_POST["frm_username"]) && strlen($_POST["frm_username"]) != 0 && isset($_POST["frm_homedir"]) && strlen($_POST["frm_homedir"]) != 0 && isset($_POST["frm_password"]) && strlen($_POST["frm_password"]) != 0 ) {
 	if (!$db->get_user_exists($_POST["frm_username"])) {
-	  $db->do_add_user($_POST["frm_username"], $_POST["frm_password"], $_POST["frm_homedir"], $_POST["frm_shell"], $_POST["frm_main_group"], $_POST["frm_expiration"], $_POST["frm_disabled"], @$_POST["frm_name"], @$_POST["frm_mail"], @$_POST["frm_adress"], @$_POST["frm_notes"], @$_POST["frm_sshky"]);
-		if ($config_ext['vhosts']['enabled'] == 1) {
-			$uid = $db->get_UIDbyUSERNAME($_POST["frm_username"]);
-			$db->do_add_vhuser($_POST["frm_username"], $_POST["frm_homedir"], $uid);
+		if (substr($config_ftp_default_home, -6) == '%HOME%') {
+			$default_home = substr($config_ftp_default_home, 0, -6);
+		} else {
+			$default_home = $config_ftp_default_home;
 		}
-
-		if ($config_ext['quota']['enabled'] == 1 && $_POST['frm_add_quota'] == 1) {
-			$db->do_add_default_quota($_POST["frm_username"]);
+		$homedir = false;
+		if ($_POST["frm_main_group"] == 10001) {
+			/* External User */
+			if (strlen($_POST["frm_assignedinternaluser"]) != 0) {
+				$homedir = rtrim($default_home, '/').'/'.$_POST["frm_assignedinternaluser"].'/'.$_POST["frm_username"];
+			} else {
+				doError('Missing Input', 'Missing assigned internal user for the new external user.');
+			}
+		} else {
+			/* Internal User */
+			$homedir = rtrim($default_home, '/').'/'.$_POST["frm_username"];
 		}
+		if ($homedir) {
+			$db->do_add_user($_POST["frm_username"], $_POST["frm_password"], $homedir, $_POST["frm_shell"], $_POST["frm_main_group"], $_POST["frm_expiration"], $_POST["frm_disabled"], @$_POST["frm_name"], @$_POST["frm_mail"], @$_POST["frm_adress"], @$_POST["frm_notes"], @$_POST["frm_sshky"]);
 
-		if ($config_createuser_command != '') {
-			$params = '"' . $_POST["frm_username"] . '" "' . $db->get_last_added_userid() . '" "' . $_POST["frm_main_group"] . '" "' . $_POST["frm_homedir"] . '" "' . $_POST["frm_mail"] . '"';
-			$cmd_output = shell_exec($config_createuser_command . ' ' . $params . ' 2>&1');
+			if ($config_ext['vhosts']['enabled'] == 1) {
+				$uid = $db->get_UIDbyUSERNAME($_POST["frm_username"]);
+				$db->do_add_vhuser($_POST["frm_username"], $homedir, $uid);
+			}
+
+			if ($config_ext['quota']['enabled'] == 1 && $_POST['frm_add_quota'] == 1) {
+				$db->do_add_default_quota($_POST["frm_username"]);
+			}
+
+			if ($config_createuser_command != '') {
+				$params = '"' . $_POST["frm_username"] . '" "' . $db->get_last_added_userid() . '" "' . $_POST["frm_main_group"] . '" "' . $homedir . '" "' . $_POST["frm_mail"] . '"';
+				$cmd_output = shell_exec($config_createuser_command . ' ' . $params . ' 2>&1');
+			}
 		}
 	}
 }

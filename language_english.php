@@ -10,6 +10,7 @@ $language['general']['primarygroup'] 	= 'Primary group';
 $language['general']['homedirectory'] 	= 'Home directory';
 $language['general']['enabled'] 		= 'Enabled';
 $language['general']['disabled'] 		= 'Disabled';
+$language['general']['assignedinternaluser']    = 'Assigned internal user';
 $language['general']['expiration'] 		= 'Expiration';
 $language['general']['expiration_never']= 'Never';
 $language['general']['password'] 		= 'Password';

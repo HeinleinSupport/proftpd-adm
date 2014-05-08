@@ -1,6 +1,15 @@
 <?php
 $specialgroup['internal'] = 10000;
 $specialgroup['external'] = 10001;
+
+$user_internal = array();
+
+foreach ($userlist as $user_data) {
+  if ($user_data['groupname'] == 'internal') {
+    $user_internal[$user_data['userid']] = $user_data;
+  }
+}
+
 ?>
 <table class="box">
 	<tr>
@@ -81,8 +90,16 @@ $specialgroup['external'] = 10001;
 				// -->
 				</script>
 				<tr>
-					<td width="100" class="box-sel-head">&nbsp;</td>
-					<td width="220" class="box-sel" align="right">&nbsp;</td>
+					<td width="100" class="box-sel-head"><?php echo $GLOBALS['language']['general']['assignedinternaluser']; ?>:</td>
+					<td width="220" class="box-sel" align="right">
+						<select name="frm_assignedinternaluser" style="width: 238px;"><option value=""></option>
+						<?php 
+					                foreach ($user_internal as $user) {
+							  echo '<option value="' . $user["userid"] . '">'. $user['userid'] . '</option>';
+							}
+					        ?>
+                                                </select>
+					</td>
 					<td width="*" class="box-sel">&nbsp;</td>
 					<td width="130" class="box-sel-head"><?php echo $GLOBALS['language']['general']['expiration']; ?>:</td>
 					<td width="220" class="box-sel" align="right">

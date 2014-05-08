@@ -174,7 +174,7 @@ if ($config_ext['quota']['enabled'] == 1) {
 					<td width="100"  class="box-sel" align="left"><?php echo $res_data["userid"]; ?></td>
 					<td width="*"  class="box-sel" align="center">&nbsp;</td>
 					<td width="110"  class="box-sel-head" align="left"><?php echo $GLOBALS['language']['general']['homedirectory']; ?>:</td>
-					<td width="100"  class="box-sel" align="left"><?php fix_home($res_data["homedir"]); ?></td>
+					<td width="100"  class="box-sel" align="left"><?php echo $res_data["homedir"]; ?></td>
 					<td width="*"  class="box-sel" align="center">&nbsp;</td>
 					<td width="110"   class="box-sel-head" align="left"><?php echo $GLOBALS['language']['general']['expiration']; ?>:</td>
 					<td width="100"  class="box-sel" align="left"><?php echo $res_data["expiration"]; ?></td>
