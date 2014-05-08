@@ -1,3 +1,7 @@
+<?php
+$specialgroup['internal'] = 10000;
+$specialgroup['external'] = 10001;
+?>
 <table class="box">
 	<tr>
 		<td class="box-headline">&gt;&gt; Add user</td>
