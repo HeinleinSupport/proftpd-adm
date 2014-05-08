@@ -44,7 +44,7 @@ $specialgroup['external'] = 10001;
 					<td width="220" class="box-sel" align="right"><input type="text" size="45" name="frm_homedir" value="<?php
 						if (substr($config_ftp_default_home, -6) == '%HOME%') echo substr($config_ftp_default_home, 0, -6);
 						else echo $config_ftp_default_home;
-					?>" style="width: 236px;"></td>
+					?>" style="width: 236px;" disabled="true"></td>
 					<td width="*" class="box-sel">&nbsp;</td>
 					<td width="130" class="box-sel-head"><?php echo $GLOBALS['language']['general']['disabled']; ?>:</td>
 					<td width="220" class="box-sel" align="right">
