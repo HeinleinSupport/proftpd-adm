@@ -20,7 +20,7 @@
 				</tr>
 				<tr>
 					<td width="100" class="box-sel-head"><?php echo $GLOBALS['language']['general']['homedirectory']; ?>:</td>
-					<td width="220" class="box-sel" align="right"><input type="text" size="45" name="frm_homedir" value="<?php echo $res_data["homedir"]; ?>" style="width: 236px;"></td>
+					<td width="220" class="box-sel" align="right"><input type="text" size="45" name="frm_homedir" value="<?php echo $res_data["homedir"]; ?>" style="width: 236px;" disabled="true"></td>
 					<td width="*" class="box-sel">&nbsp;</td>
 					<td width="100" class="box-sel-head"><?php echo $GLOBALS['language']['general']['shell']; ?>:</td>
 					<td width="220" class="box-sel" align="right">
