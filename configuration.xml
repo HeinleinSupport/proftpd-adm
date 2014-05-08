@@ -15,7 +15,7 @@
 			<ftp_root>/srv/ftp</ftp_root>
 		</generic>
 		<create_users>
-			<default_homedirectory>/srv/ftp/home</default_homedirectory>
+			<default_homedirectory>/srv/ftp/home/%HOME%</default_homedirectory>
 			<createuser_command>/usr/bin/sudo /var/www/html/proftpd-adm/misc/user_script/create_user.sh</createuser_command>
 			<default_shell>/bin/false</default_shell>
 		</create_users>
