@@ -26,7 +26,7 @@
 
 							foreach($grouplist as $group) {
 								echo '<option value="' . $group["gid"] . '"';
-								if ($group["groupname"] == 'users'){
+								if ($group["groupname"] == 'internal'){
 									echo 'selected';
 									}
 								echo '>' . $group["groupname"];
