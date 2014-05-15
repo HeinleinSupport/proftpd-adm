@@ -30,7 +30,7 @@
 		<userview_striplogpath>1</userview_striplogpath>
 
 		<sysinfo_only>0</sysinfo_only>
-		<style>blueish_hue</style>
+		<style>easy_gray</style>
 		<language>english</language>
 		<skip_mountpoints>
 			<mountpoint>/dev</mountpoint>
