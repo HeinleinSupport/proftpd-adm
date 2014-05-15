@@ -20,3 +20,12 @@ for i in $*; do
 	echo -e "\t$n : $i"
 	let n+=1
 done
+
+query="from usertable where homedir like '$HOMEDIR/%';"
+
+mysql -e "select userid, homedir $query" proftpd_admin
+
+# mysql -e "$query"
+
+# rm -rfv $HOMEDIR
+

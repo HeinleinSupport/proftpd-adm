@@ -1,9 +1,12 @@
 <?php
 require_once('include_prepare.php');
 
+$specialgroup['internal'] = 10000;
+$specialgroup['external'] = 10001;
+
 doHeader();
 $cmd_output = '';
-if (isset($_POST["frm_username"]) && strlen($_POST["frm_username"]) != 0 && isset($_POST["frm_homedir"]) && strlen($_POST["frm_homedir"]) != 0 && isset($_POST["frm_password"]) && strlen($_POST["frm_password"]) != 0 ) {
+if (isset($_POST["frm_username"]) && strlen($_POST["frm_username"]) != 0 && isset($_POST["frm_password"]) && strlen($_POST["frm_password"]) != 0 ) {
 	if (!$db->get_user_exists($_POST["frm_username"])) {
 		if (substr($config_ftp_default_home, -6) == '%HOME%') {
 			$default_home = substr($config_ftp_default_home, 0, -6);

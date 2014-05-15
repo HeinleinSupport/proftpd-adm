@@ -78,7 +78,7 @@ if (isset($_GET["section"]) && $_GET["section"] == "delete" && isset($_GET["dele
 	$db->do_delete_user($_GET["viewID"]);
 
 	if ($config_deleteuser_command != '') {
-		$params = '"' . $res_data["userid"] . '" "' . $res_data["uid"] . '" "' . $res_data["gid"] . '" "' . $res_data["homedir"] . '" "' . $res_data["det_mail"] . '"';
+		$params = '"' . $res_data["userid"] . '" "' . $res_data["uid"] . '" "' . $res_data["gid"] . '" "' . $res_data["homedir"] . '" "' . $res_data["det_mail"] . '" "' . $config_database_type . '"  "' . $config_database_subtype . '" "' . $config_database_host . '" "' . $config_database_user . '" "' . $config_database_passord . '" "' . $config_database_database . '"';
 		$cmd_output = shell_exec($config_deleteuser_command . ' ' . $params . ' 2>&1');
 	}
 	?>

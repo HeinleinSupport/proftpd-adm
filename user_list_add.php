@@ -1,6 +1,4 @@
 <?php
-$specialgroup['internal'] = 10000;
-$specialgroup['external'] = 10001;
 
 $user_internal = array();
 
