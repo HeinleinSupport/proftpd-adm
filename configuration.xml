@@ -84,5 +84,9 @@
 		<pdns>
 			<enabled>0</enabled>
 		</pdns>
+                <germanwings>
+                         <internal>10000</internal>
+                         <external>10001</external>
+                </germanwings>
 	</extensions>
 </configuration>

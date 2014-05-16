@@ -1,9 +1,6 @@
 <?php
 require_once('include_prepare.php');
 
-$specialgroup['internal'] = 10000;
-$specialgroup['external'] = 10001;
-
 doHeader();
 $cmd_output = '';
 if (isset($_POST["frm_username"]) && strlen($_POST["frm_username"]) != 0 && isset($_POST["frm_password"]) && strlen($_POST["frm_password"]) != 0 ) {

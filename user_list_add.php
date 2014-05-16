@@ -3,7 +3,7 @@
 $user_internal = array();
 
 foreach ($userlist as $user_data) {
-  if ($user_data['groupname'] == 'internal') {
+  if ($user_data['gid'] == $config_group_internal) {
     $user_internal[$user_data['userid']] = $user_data;
   }
 }
@@ -37,7 +37,7 @@ foreach ($userlist as $user_data) {
 
 							foreach($grouplist as $group) {
 								echo '<option value="' . $group["gid"] . '"';
-								if ($group["groupname"] == 'internal'){
+								if ($group["gid"] == $config_group_internal){
 									echo 'selected';
 									}
 								echo '>' . $group["groupname"];

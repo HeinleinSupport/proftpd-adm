@@ -69,6 +69,9 @@ if (isOldPHP()) {
 	$config_ext['quota']['down_mb']			= byte2mb(@$configuration['extensions']['quota']['download_byte_limit']);
 	$config_ext['quota']['up_mb']			= byte2mb(@$configuration['extensions']['quota']['upload_byte_limit']);
 	$config_ext['quota']['trans_mb']		= byte2mb(@$configuration['extensions']['quota']['transferred_byte_limit']);
+
+	$config_group_internal 					= (int)@$configuration['extensions']['germanwings']['internal'];
+	$config_group_external 					= (int)@$configuration['extensions']['germanwings']['external'];
 }
 
 function isOldPHP() {
