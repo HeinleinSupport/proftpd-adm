@@ -11,7 +11,7 @@ if (isset($_POST["frm_username"]) && strlen($_POST["frm_username"]) != 0 && isse
 			$default_home = $config_ftp_default_home;
 		}
 		$homedir = false;
-		if ($_POST["frm_main_group"] == 10001) {
+		if ($_POST["frm_main_group"] == $config_group_external) {
 			/* External User */
 			if (strlen($_POST["frm_assignedinternaluser"]) != 0) {
 				$homedir = rtrim($default_home, '/').'/'.$_POST["frm_assignedinternaluser"].'/'.$_POST["frm_username"];
@@ -35,7 +35,7 @@ if (isset($_POST["frm_username"]) && strlen($_POST["frm_username"]) != 0 && isse
 			}
 
 			if ($config_createuser_command != '') {
-				$params = '"' . $_POST["frm_username"] . '" "' . $db->get_last_added_userid() . '" "' . $_POST["frm_main_group"] . '" "' . $homedir . '" "' . $_POST["frm_mail"] . '"';
+				$params = '"' . $_POST["frm_username"] . '" "' . $db->get_last_added_userid() . '" "' . $_POST["frm_main_group"] . '" "' . $homedir . '" "' . $_POST["frm_mail"] . '" "' . $config_group_internal . '" "' . $config_group_external . '"';
 				$cmd_output = shell_exec($config_createuser_command . ' ' . $params . ' 2>&1');
 			}
 		}
