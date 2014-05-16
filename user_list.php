@@ -1,15 +1,16 @@
 <?php
 require_once('include_prepare.php');
 
+if (substr($config_ftp_default_home, -6) == '%HOME%') {
+	$default_home = substr($config_ftp_default_home, 0, -6);
+} else {
+	$default_home = $config_ftp_default_home;
+}
+
 doHeader();
 $cmd_output = '';
 if (isset($_POST["frm_username"]) && strlen($_POST["frm_username"]) != 0 && isset($_POST["frm_password"]) && strlen($_POST["frm_password"]) != 0 ) {
 	if (!$db->get_user_exists($_POST["frm_username"])) {
-		if (substr($config_ftp_default_home, -6) == '%HOME%') {
-			$default_home = substr($config_ftp_default_home, 0, -6);
-		} else {
-			$default_home = $config_ftp_default_home;
-		}
 		$homedir = false;
 		if ($_POST["frm_main_group"] == $config_group_external) {
 			/* External User */
@@ -56,6 +57,7 @@ $group_data = $db->get_group_data();
 			userid  passwd  homedir  shell  uid  gid  count  lastlogin
 			-->
 				<td width="*"  class="box-pl" align="center"><?php echo $GLOBALS['language']['general']['username']; ?></td>
+				<td width="*"  class="box-pl" align="center" style="word-wrap:break-word;"><?php echo $GLOBALS['language']['general']['assignedinternaluser']; ?></td>
 				<td width="*"  class="box-pl" align="center"><?php echo $GLOBALS['language']['general']['groups']; ?></td>
 				<td width="*"  class="box-pl" align="center"><?php echo $GLOBALS['language']['general']['numlogins']; ?></td>
 				<td width="120" class="box-pl" align="center"><?php echo $GLOBALS['language']['general']['lastlogin']; ?></td>
@@ -75,6 +77,8 @@ $group_data = $db->get_group_data();
 				foreach ($userlist as $user_data) {
 					echo '<tr onmouseover="if (typeof(this.style) != \'undefined\') this.className = \'overRow\';" onmouseout="if (typeof(this.style) != \'undefined\') this.className = \'\'">';
 					echo '<td width="*" class="box-sel" align="left"><a href="user_view.php?viewID=' . $user_data['uid'] . '">' . $user_data['userid'] . '</a></td>';
+					$lenintusername = strlen($user_data['homedir']) - strlen($default_home) - strlen($user_data['userid']);
+					echo '<td width="*" class="box-sel" align="left">' . (($lenintusername>0)?substr($user_data['homedir'], strlen($default_home), $lenintusername -1 ):'&nbsp;') . '</td>';
 					echo '<td width="*"  class="box-sel" align="left">';
 
 					if (strlen($user_data["groupname"]) != 0) echo '<a href="group_view.php?viewID=' . $user_data['gid'] . '">';
