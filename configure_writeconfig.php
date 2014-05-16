@@ -138,6 +138,10 @@ $out .=	"		</quota>\n";
 $out .=	"		<pdns>\n";
 $out .=	"			<enabled>" . @$config_ext['pdns']['enabled'] . "</enabled>\n";
 $out .=	"		</pdns>\n";
+$out .=	"		<germanwings>\n";
+$out .=	"			<internal>" . $config_group_internal . "</internal>\n";
+$out .=	"			<external>" . $config_group_external . "</external>\n";
+$out .=	"		</germanwings>\n";
 $out .=	"	</extensions>\n";
 $out .=	"</configuration>";
 
