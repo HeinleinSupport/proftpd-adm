@@ -35,6 +35,13 @@
 				</tr>
 
 				<tr>
+					<td width="200" class="box-sel-head"><?php echo $GLOBALS['language']['configure']['ftp_filetreecmd']; ?>:</td>
+					<td width="*" class="box-sel" align="right">
+						<input type="text" size="100" name="frm_proftd_ftcmd" value="<?php echo @$config_filetreeuser_command; ?>" style="width: 512px;">
+					</td>
+				</tr>
+
+				<tr>
 					<td width="200" class="box-sel-head"><?php echo $GLOBALS['language']['configure']['ftp_defshell']; ?>:</td>
 					<td width="*" class="box-sel" align="right">
 						<select name="frm_proftpd_defshell" style="width: 514px;">

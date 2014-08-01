@@ -295,6 +295,7 @@ if ($config_ext['quota']['enabled'] == 1) {
 $user_menu[$GLOBALS['language']['menu']['traffic']]			= $_SERVER['PHP_SELF'] . '?viewID=' . $_GET["viewID"] . '&amp;section=traffic';
 $user_menu[$GLOBALS['language']['menu']['section']]			= $_SERVER['PHP_SELF'] . '?viewID=' . $_GET["viewID"] . '&amp;section=section';
 $user_menu[$GLOBALS['language']['menu']['transfer_log']]	= $_SERVER['PHP_SELF'] . '?viewID=' . $_GET["viewID"] . '&amp;section=transferlog';
+$user_menu[$GLOBALS['language']['menu']['filetree']]	    = $_SERVER['PHP_SELF'] . '?viewID=' . $_GET["viewID"] . '&amp;section=filetree';
 doMenu($user_menu);
 unset($user_menu);
 ?>
@@ -345,6 +346,32 @@ if (isset($_GET["section"]) and $_GET["section"] == "transferlog") {
 
 	make_logviewer($logskip, $_SERVER['PHP_SELF'] . '?viewID=' . $_GET["viewID"] . '&amp;section=transferlog&amp;', $res_data["userid"]);
 }
+
+if (isset($_GET["section"]) and $_GET["section"] == "filetree") {
+    if ($config_filetreeuser_command != '') {
+        $cmd_output = shell_exec($config_filetreeuser_command . ' ' . $res_data["homedir"] . ' 2>&1');
+
+        if ($cmd_output != '') {
+?>
+	<table class="box">
+		<tr>
+			<td class="box-headline">&gt;&gt; <?php echo $GLOBALS['language']['menu']['filetree']; ?></td>
+		</tr>
+		<tr>
+			<td>
+				<table class="box" style="border-style: none;">
+					<tr>
+						<td class="box-sel" align="left"><pre><?php echo $cmd_output; ?></pre></td>
+                    </tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+<?php
+        }
+    }
+}
+
 if (isset($_GET["section"]) and $_GET["section"] == "password") 	include('user_view_password.php');
 if (isset($_GET["section"]) and $_GET["section"] == "groups")		include('user_view_groups.php');
 if (isset($_GET["section"]) and $_GET["section"] == "expiration")	include('user_view_expiration.php');

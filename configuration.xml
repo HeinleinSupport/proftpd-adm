@@ -22,6 +22,9 @@
 		<delete_users>
 			<deleteuser_command>/usr/bin/sudo /var/www/html/proftpd-adm/misc/user_script/delete_user.sh</deleteuser_command>
 		</delete_users>
+		<filetree_users>
+			<filetreeuser_command>/usr/bin/sudo /var/www/html/proftpd-adm/misc/user_script/filetree_user.sh</filetreeuser_command>
+		</filetree_users>
 	</proftpd>
 	<user_interface>
 		<toplist_num_names>10</toplist_num_names>

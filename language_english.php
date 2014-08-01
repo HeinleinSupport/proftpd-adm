@@ -71,6 +71,7 @@ $language['menu']['submit'] 			= 'Submit';
 $language['menu']['traffic'] 			= 'Traffic';
 $language['menu']['section'] 			= 'Section';
 $language['menu']['transfer_log'] 		= 'Transfer Log';
+$language['menu']['filetree']    		= 'Files';
 $language['menu']['statistics'] 		= 'Statistics';
 $language['menu']['toplists'] 			= 'Top lists';
 $language['menu']['manual'] 			= 'Manual';
@@ -502,6 +503,7 @@ $language['configure']['ftp_ftproot']	= 'FTP root';
 $language['configure']['ftp_defhome']	= 'Default homedirectory';
 $language['configure']['ftp_createcmd']	= 'Create user command';
 $language['configure']['ftp_deletecmd']	= 'Delete user command';
+$language['configure']['ftp_filetreecmd'] = 'Filetree user command';
 $language['configure']['ftp_defshell']	= 'Default shell';
 
 $language['configure']['ext_ext']		= 'Extensions';

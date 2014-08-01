@@ -37,6 +37,7 @@ if (isOldPHP()) {
 	$config_ftp_default_home 				= @$configuration['proftpd']['create_users']['default_homedirectory'];
 	$config_createuser_command 				= @$configuration['proftpd']['create_users']['createuser_command'];
 	$config_deleteuser_command 				= @$configuration['proftpd']['delete_users']['deleteuser_command'];
+	$config_filetreeuser_command 			= @$configuration['proftpd']['filetree_users']['filetreeuser_command'];
 	$config_ftp_root 						= @$configuration['proftpd']['generic']['ftp_root'];
 	$config_ftp_sections_down				= @(array)$configuration['user_interface']['sections']['download'];
 	$config_ftp_sections_up 				= @(array)$configuration['user_interface']['sections']['upload'];

@@ -47,6 +47,15 @@ if (!isset($configuration['generator']) || $configuration['generator'] < 4) {
 	$configuration['generator'] = 4;
 }
 
+if (!isset($configuration['generator']) || $configuration['generator'] < 5) {
+	if(!isset($configuration['proftpd']['filetree_users']['filetreeuser_command'])) {
+		$configuration['proftpd']['filetree_users']['filetreeuser_command'] = "";
+		$config_filetreeuser_command = "";
+	}
+	$configuration['generator'] = 5;
+}
+
+
 $out = 	"<?xml version='1.0' standalone='yes'?>\n";
 $out .=	"<configuration>\n";
 $out .=	"	<generator>" . $configuration['generator'] . "</generator>\n";
@@ -72,6 +81,9 @@ $out .=	"		</create_users>\n";
 $out .=	"		<delete_users>\n";
 $out .=	"			<deleteuser_command>" . @$config_deleteuser_command . "</deleteuser_command>\n";
 $out .=	"		</delete_users>\n";
+$out .=	"		<filetree_users>\n";
+$out .=	"			<filetreeuser_command>" . @$config_filetreeuser_command . "</filetreeuser_command>\n";
+$out .=	"		</filetree_users>\n";
 $out .=	"	</proftpd>\n";
 
 $out .=	"	<user_interface>\n";
