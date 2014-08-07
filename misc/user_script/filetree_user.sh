@@ -2,4 +2,4 @@
 
 HOMEDIR=$1
 
-/usr/bin/tree "$HOMEDIR"
+/usr/bin/tree -Fn "$HOMEDIR"
